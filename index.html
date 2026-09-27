@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zonas para vivir v0.5.0 · Madrid</title><link rel="stylesheet" href="./style.css">
+<style>#file-warning{display:none}body.file-mode #file-warning{display:block;padding:18px;background:#fff3d5;color:#502f00;font:16px/1.5 system-ui}body.file-mode main{display:none}</style>
+<script>if(location.protocol==='file:')document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('file-mode'))</script></head>
+<body>
+<div id="file-warning"><strong>Arranca la aplicación desde una terminal en esta carpeta:</strong> <code>bash iniciar-ubuntu.sh</code>. Después abre <a href="http://localhost:4173">http://localhost:4173</a>.</div>
+<header><div><strong>Zonas para vivir <small>v0.5.0</small></strong><span>Madrid, Toledo, Guadalajara, Segovia y Ávila · destino Sol</span></div><div class="top-controls"><label>Operación <select id="mode"><option value="buy">Compra</option><option value="rent">Alquiler</option></select></label><label>Presupuesto (€) <input id="budget" type="number" min="0" step="10000" value="350000"></label><label id="area-label">m² <input id="area" type="number" min="20" max="400" value="90"></label></div></header>
+<main>
+<aside class="filters"><h2>Municipios</h2>
+<p class="hint">El presupuesto excluye celdas y municipios que lo superen o no tengan precio conocido. Compra: precio medio €/m² × superficie indicada. Alquiler: mediana mensual. Escribe 0 para quitar este límite.</p>
+<label class="search-label" for="search">Buscar municipio</label><input id="search" list="town-options" placeholder="Ej. Cercedilla" autocomplete="off"><datalist id="town-options"></datalist>
+<div class="criterion"><label for="pop-min">Habitantes mínimos <output id="pop-min-value">5.000</output></label><input id="pop-min" type="range" min="0" max="12" value="5"></div>
+<div class="criterion"><label for="pop-max">Habitantes máximos <output id="pop-max-value">Sin máximo</output></label><input id="pop-max" type="range" min="0" max="12" value="12"></div>
+<p class="hint">Población municipal INE 2023, no población de cada pedanía.</p>
+<label class="check"><input id="priced-only" type="checkbox"> Solo con precio municipal</label>
+<hr><h2>Prioridades</h2><p class="hint">Los pesos cambian el score al instante. Los criterios sin datos no puntúan.</p><div id="sliders"></div><button id="reset">Restaurar pesos</button>
+<div class="legend"><span id="color-low">0</span><div class="gradient"></div><span id="color-high">100</span></div><div class="hint">Colores relativos al 10.º–90.º percentil de las celdas visibles. La ficha muestra el score absoluto. Gris: sin score.</div>
+</aside>
+<section class="map-section"><div class="map-head"><div><strong>Mapa de puntuación</strong><small id="coverage" role="status">Cargando datos oficiales…</small></div><div class="map-actions"><button id="fit" title="Ver las cinco provincias">Encuadrar</button><button id="zoomout" aria-label="Alejar">−</button><button id="zoomin" aria-label="Acercar">+</button></div></div>
+<div class="map-wrap"><canvas id="map" tabindex="0" aria-label="Mapa de puntuación. También puedes seleccionar un municipio con el buscador o la lista inferior." role="img"></canvas><div id="hover" class="map-tooltip" hidden></div><div id="map-notice" class="map-notice" hidden></div><div class="map-hint">Clic en municipio o celda · arrastra para mover · rueda para ampliar</div></div>
+<div class="map-summary" id="summary"></div><div class="town-list" id="town-list" aria-label="Municipios del filtro"></div>
+</section>
+<aside class="details" id="details" aria-live="polite"><h2>Selecciona un municipio</h2><p>Haz clic en el mapa, usa el buscador o elige un nombre de la lista.</p></aside>
+</main>
+<footer><span>Geometría/población: © MITECO · INE · IGN (2023), adaptación Gallego-Castillo. Coordenadas de núcleos: GeoNames. Rutas: OSRM / © OpenStreetMap contributors.</span> <a href="/docs/sources.md" target="_blank">Fuentes y cobertura</a> · <a href="/docs/routing.md" target="_blank">Cálculo de trayectos</a></footer>
+<script type="module" src="./src/app.js"></script>
+</body></html>

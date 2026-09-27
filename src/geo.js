@@ -1,0 +1,5 @@
+export function polygons(geometry){return geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates}
+function inRing(lon,lat,ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [x,y]=ring[i],[xj,yj]=ring[j];if(((y>lat)!==(yj>lat))&&(lon<(xj-x)*(lat-y)/(yj-y)+x))inside=!inside}return inside}
+export function contains(place,point){const [a,b,c,d]=place.bbox;if(point.lon<a||point.lon>c||point.lat<b||point.lat>d)return false;return polygons(place.geometry).some(poly=>inRing(point.lon,point.lat,poly[0])&&!poly.slice(1).some(r=>inRing(point.lon,point.lat,r)))}
+export function buildIndex(places){const bins=new Map(),size=.15;for(const p of places){const [a,b,c,d]=p.bbox;for(let x=Math.floor(a/size);x<=Math.floor(c/size);x++)for(let y=Math.floor(b/size);y<=Math.floor(d/size);y++){const key=`${x}:${y}`;if(!bins.has(key))bins.set(key,[]);bins.get(key).push(p)}}return point=>(bins.get(`${Math.floor(point.lon/size)}:${Math.floor(point.lat/size)}`)||[]).find(p=>contains(p,point))??null}
+export function populationMatches(p,min,max){return p.population>=min&&p.population<=max}

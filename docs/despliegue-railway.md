@@ -1,0 +1,13 @@
+# Publicar para la familia con Railway
+
+La aplicación se ejecuta en Railway como un servicio Node. Lee `PORT` de Railway y, con `HOST=0.0.0.0`, acepta conexiones a través de su dominio público. Necesitas una cuenta de GitHub y otra de Railway.
+
+1. Crea un repositorio **privado** en GitHub y sube el contenido de esta carpeta, manteniendo `src/`, `data/`, `docs/`, `scripts/` y `package.json` en la raíz. Incluye `data/geography.json` y `data/routes.json`. Si quieres el slider de autobuses, ejecuta antes `python3 scripts/import_buses.py --download-crtm` en tu ordenador y añade también el `data/buses.json` generado al repositorio. Ese feed se debe volver a generar periódicamente. Si ya tienes un `data/buses.json` en tu instalación actual, consérvalo y vuelve a importarlo con esta versión. Para transporte público precalculado, añade también `data/transit.json` si lo has generado.
+2. En Railway: **New Project → Deploy from GitHub repo**, conecta el repositorio privado y elige este proyecto. Railway detecta Node; el comando de inicio es `npm start`. No hace falta base de datos ni `npm install -g`.
+3. En el servicio, sección **Variables**, añade `HOST=0.0.0.0`, `FAMILY_USER=familia` y `FAMILY_PASSWORD=<una contraseña larga y exclusiva>`. Introduce la contraseña en Railway, **nunca** en un fichero o en GitHub. La aplicación se negará a escuchar en una dirección pública si no has configurado la contraseña. Railway configura `PORT` automáticamente.
+4. En **Settings → Networking → Generate Domain**, crea el dominio HTTPS. Ábrelo en el navegador: se solicitarán usuario y contraseña antes de mostrar el mapa o los datos. Comparte la URL y la contraseña por canales distintos con tus familiares. Puedes añadir esa URL a la pantalla de inicio del móvil o a los marcadores.
+5. Para publicar cambios, sube una nueva versión al repositorio: Railway redepliega automáticamente. Conserva los archivos de datos generados en el repositorio o regenéralos antes de cada subida. Los archivos creados **solo dentro de Railway** no persisten tras un nuevo despliegue.
+
+La contraseña usa autenticación HTTP Basic: es apropiada para un grupo pequeño que comparta credenciales **a través de HTTPS**. El navegador puede recordarlas; para revocar el acceso de alguien, cambia `FAMILY_PASSWORD` en Railway y comparte la nueva contraseña. No abras el servicio mediante HTTP sin cifrar.
+
+Si aparece «Application failed to respond», comprueba que `HOST=0.0.0.0`, que la variable `FAMILY_PASSWORD` existe, que el servicio arrancó con `npm start` y que el dominio apunta al puerto de `PORT`. Railway puede generar y gestionar el dominio HTTPS; el plan y los costes se consultan en https://railway.com/pricing.
